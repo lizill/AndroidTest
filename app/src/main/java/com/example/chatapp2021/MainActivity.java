@@ -38,19 +38,45 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String stEmail = etId.getText().toString();
-                String stPassword = etPassword.getText().toString();
+                String userID = etId.getText().toString();
+                String userPW = etPassword.getText().toString();
 
-                if(stEmail.isEmpty()) {
+                if(userID.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Please insert Email", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(stPassword.isEmpty()) {
+                if(userPW.isEmpty()) {
                     Toast.makeText(MainActivity.this, "Please insert Password", Toast.LENGTH_LONG).show();
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
 
+                Response.Listener<String> responseLister = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            boolean success = jsonResponse.getBoolean("success");
+                            if(success) {
+                                Intent intent = new Intent(MainActivity.this, GroupActivity.class);
+                                MainActivity.this.startActivity(intent);
+                                finish();
+                            }
+                            else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                                builder.setMessage("계정을 다시 확인하세요.")
+                                        .setNegativeButton("다시 시도", null)
+                                        .create()
+                                        .show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                LoginRequest loginRequest = new LoginRequest(userID, userPW, responseLister);
+                RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
+                queue.add(loginRequest);
 //                Toast.makeText(MainActivity.this, "Login", Toast.LENGTH_LONG).show();
             }
         });
