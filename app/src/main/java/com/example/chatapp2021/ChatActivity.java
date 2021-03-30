@@ -1,21 +1,15 @@
 package com.example.chatapp2021;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.util.Log;
 
-import com.github.nkzawa.socketio.client.IO;
-
-import java.net.Socket;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Hashtable;
+
+import io.socket.client.IO;
+import io.socket.client.Socket;
 
 public class ChatActivity extends AppCompatActivity {
 //    private RecyclerView recyclerView;
@@ -26,19 +20,15 @@ public class ChatActivity extends AppCompatActivity {
 //    private RecyclerView.LayoutManager layoutManager;
 
     private Socket mSocket;
+    private String userID;
+    private String roomName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        try {
-            mSocket = IO.socket("http://192.168.0.16:3000");
-            mSocket.connect();
-            mSocket.on(Socket)
-        } catch(URISyntaxException e) {
-            e.printStackTrace();
-        }
+        init();
 
 //        stEmail = getIntent().getStringExtra("email");
 //        btnSend = (Button) findViewById(R.id.btnSend);
@@ -71,5 +61,26 @@ public class ChatActivity extends AppCompatActivity {
 //
 //            }
 //        });
+    }
+
+    private void init() {
+        try {
+            mSocket = IO.socket("http://122.202.45.142:80");
+            Log.d("SOCKET", "Connection success : " + mSocket.id());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        Intent intent = getIntent();
+        userID = intent.getStringExtra("userID");
+        roomName = intent.getStringExtra("roomName");
+
+        mSocket.connect();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mSocket.disconnect();
     }
 }
