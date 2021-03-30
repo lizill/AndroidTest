@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
                         boolean success = jsonResponse.getBoolean("success");
                         if (success) {
                             Toast.makeText(MainActivity.this, loginId +"님 자동로그인 입니다.", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                            Intent intent = new Intent(MainActivity.this, GroupActivity.class);
+                            intent.putExtra("email", loginId);
                             startActivity(intent);
                             finish();
                         } else {

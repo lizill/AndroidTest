@@ -15,11 +15,12 @@
             android:name=".GroupActivity"
             android:label="@string/title_activity_group"
             android:theme="@style/Theme.ChatApp2021.NoActionBar"></activity>
-        <activity android:name=".ChatActivity" />
+        <activity
+            android:name=".ChatActivity"
+            android:parentActivityName=".GroupActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

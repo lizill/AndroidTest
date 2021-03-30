@@ -7,9 +7,12 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
-    private String[] mDataset;
+    private ArrayList<String> mDataset;
+    String stMyEmail = "";
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textView;
@@ -23,7 +26,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         }
     }
 
-    public MyAdapter(String[] myDataset) {
+//    @Override
+//    public int getItemViewType(int position) {
+//        return super.getItemViewType(position);
+//        if(mDataset.get(position).email.equals(stMyEmail)) {
+//            return 1;
+//        } else {
+//            return 2;
+//        }
+//    };
+
+    public MyAdapter(ArrayList<String> myDataset) {
         mDataset = myDataset;
     }
 
@@ -33,6 +46,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         // Create a new view, which defines the UI of the list item
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.my_text_view, parent, false);
+
+        if(viewType == 1) {
+            v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.my_text_view, parent, false);
+        }
 
         MyViewHolder vh = new MyViewHolder(v);
         return vh;
@@ -44,12 +62,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        holder.textView.setText(mDataset[position]);
+        holder.textView.setText(mDataset.get(position));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length;
+        return mDataset.size();
     }
 }
