@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.$Gson$Types;
@@ -26,18 +29,27 @@ public class ChatActivity extends AppCompatActivity {
     private String userID;
     private String roomName;
     private Gson gson = new Gson();
+    private EditText etText;
+    private Button btnSend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        etText = (EditText) findViewById(R.id.etText);
+
         init();
 
+        btnSend = (Button) findViewById(R.id.btnSend);
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage();
+            }
+        });
 //        stEmail = getIntent().getStringExtra("email");
-//        btnSend = (Button) findViewById(R.id.btnSend);
 //
-//        etText = (EditText) findViewById(R.id.etText);
 //
 //        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 //
@@ -84,11 +96,24 @@ public class ChatActivity extends AppCompatActivity {
         mSocket.on(Socket.EVENT_CONNECT, args -> {
             mSocket.emit("enter", gson.toJson(new RoomData(userID, roomName)));
         });
-//        mSocket.on("update", args -> {
-//           MessageData data = gson.fromJson(args[0].toString(), MessageData.class);
-//        });
+        mSocket.on("update", args -> {
+           MessageData data = gson.fromJson(args[0].toString(), MessageData.class);
+        });
+    }
 
+    private void addChat(MessageData data) {
+        runOnUiThread(() -> {
 
+        });
+    }
+
+    private void sendMessage() {
+        mSocket.emit("newMessage", gson.toJson(new MessageData("MESSAGE",
+                userID,
+                roomName,
+                etText.getText().toString(),
+                System.currentTimeMillis()
+                )));
     }
 
     @Override
