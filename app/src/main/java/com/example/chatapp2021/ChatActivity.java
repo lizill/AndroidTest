@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.internal.$Gson$Types;
+
 import java.net.URISyntaxException;
 
 import io.socket.client.IO;
@@ -22,6 +25,7 @@ public class ChatActivity extends AppCompatActivity {
     private Socket mSocket;
     private String userID;
     private String roomName;
+    private Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +69,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void init() {
         try {
-            mSocket = IO.socket("http://122.202.45.142:80");
+            mSocket = IO.socket("http://10.0.2.2:80");
             Log.d("SOCKET", "Connection success : " + mSocket.id());
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -76,6 +80,15 @@ public class ChatActivity extends AppCompatActivity {
         roomName = intent.getStringExtra("roomName");
 
         mSocket.connect();
+
+        mSocket.on(Socket.EVENT_CONNECT, args -> {
+            mSocket.emit("enter", gson.toJson(new RoomData(userID, roomName)));
+        });
+//        mSocket.on("update", args -> {
+//           MessageData data = gson.fromJson(args[0].toString(), MessageData.class);
+//        });
+
+
     }
 
     @Override
