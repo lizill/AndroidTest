@@ -44,6 +44,7 @@ public class GroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GroupActivity.this, ChatActivity.class);
+                intent.putExtra("roomName", "testRoom");
                 startActivity(intent);
             }
         });

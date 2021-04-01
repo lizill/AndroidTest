@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     EditText etId, etPassword;
     ProgressBar progressBar;
     String userID, userPW;
+    public static SharedPreferences auto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +38,10 @@ public class MainActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
 
         // getString의 첫 번째 인자는 저장될 키, 두 번쨰 인자는 값입니다.
         // 첨엔 값이 없으므로 키값은 원하는 것으로 하시고 값을 null을 줍니다.
+        auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         String loginId = auto.getString("inputId",null);
         String loginPwd = auto.getString("inputPwd",null);
 

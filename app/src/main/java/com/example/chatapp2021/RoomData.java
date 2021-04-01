@@ -2,20 +2,20 @@ package com.example.chatapp2021;
 
 public class RoomData {
 
-    private String userId;
+    private String userID;
     private String roomName;
 
-    public RoomData(String userId, String roomName) {
-        this.userId = userId;
+    public RoomData(String userID, String roomName) {
+        this.userID = userID;
         this.roomName = roomName;
     }
 
     public String getUserId() {
-        return userId;
+        return userID;
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        this.userID = userID;
     }
 
     public String getRoomName() {

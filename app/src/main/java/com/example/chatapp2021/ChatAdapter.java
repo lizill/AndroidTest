@@ -14,10 +14,9 @@ import java.util.ArrayList;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<ChatItem> items = new ArrayList<>();
-    private Context context;
 
-    public ChatAdapter(Context context) {
-        this.context = context;
+    public ChatAdapter(ArrayList<ChatItem> list) {
+        this.items = list;
     }
 
     @NonNull
@@ -25,8 +24,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view;
-        Context context = parent.getContext();
-        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         if (viewType == ChatType.CENTER_MESSAGE) {
             view = inflater.inflate(R.layout.chat_center_item, parent, false);
@@ -34,18 +32,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (viewType == ChatType.LEFT_MESSAGE) {
             view = inflater.inflate(R.layout.chat_left_item, parent, false);
             return new LeftViewHolder(view);
-        } else if (viewType == ChatType.RIGHT_MESSAGE){
+        } else {
             view = inflater.inflate(R.layout.chat_right_item, parent, false);
             return new RightViewHolder(view);
-        } else if (viewType == ChatType.LEFT_IMAGE){
-            view = inflater.inflate(R.layout.chat_left_image, parent, false);
-            return new LeftImageViewHolder(view);
-        } else {
-            view = inflater.inflate(R.layout.chat_right_image, parent, false);
-            return new RightImageViewHolder(view);
         }
     }
-
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
@@ -58,12 +49,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (viewHolder instanceof RightViewHolder) {
             ChatItem item = items.get(position);
             ((RightViewHolder) viewHolder).setItem(item);
-        } else if (viewHolder instanceof LeftImageViewHolder) {
-            ChatItem item = items.get(position);
-//            ((LeftImageViewHolder) viewHolder).setItem(item, context);
-        } else {
-            ChatItem item = items.get(position);
-//            ((RightImageViewHolder) viewHolder).setItem(item, context);
         }
     }
 
@@ -71,12 +56,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return items.size();
     }
 
-    public void addItem(ChatItem item){
+    public void addItem(ChatItem item) {
         items.add(item);
         notifyDataSetChanged();
     }
 
-    public void setItems(ArrayList<ChatItem> items){ this.items = items; }
+    public void setItems(ArrayList<ChatItem> items) { this.items = items; }
 
     public ChatItem getItem(int position){
         return items.get(position);
@@ -136,52 +121,5 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             contentText.setText(item.getContent());
             sendTimeText.setText(item.getSendTime());
         }
-    }
-
-    public class LeftImageViewHolder extends RecyclerView.ViewHolder{
-        TextView nameText;
-        ImageView image;
-        TextView sendTimeText;
-
-        public LeftImageViewHolder(View itemView) {
-            super(itemView);
-
-            nameText = itemView.findViewById(R.id.name_text);
-            image = itemView.findViewById(R.id.image_view);
-            sendTimeText = itemView.findViewById(R.id.send_time_text);
-        }
-
-//        public void setItem(ChatItem item, Context context){
-//            MultiTransformation option = new MultiTransformation(new CenterCrop(), new RoundedCorners(8));
-//
-//            Glide.with(context)
-//                    .load(item.getContent())
-//                    .apply(RequestOptions.bitmapTransform(option))
-//                    .into(image);
-//            nameText.setText(item.getName());
-//            sendTimeText.setText(item.getSendTime());
-//        }
-    }
-
-    public class RightImageViewHolder extends RecyclerView.ViewHolder{
-        ImageView image;
-        TextView sendTimeText;
-
-        public RightImageViewHolder(View itemView) {
-            super(itemView);
-
-            image = itemView.findViewById(R.id.image_view);
-            sendTimeText = itemView.findViewById(R.id.send_time_text);
-        }
-
-//        public void setItem(ChatItem item, Context context){
-//            MultiTransformation option = new MultiTransformation(new CenterCrop(), new RoundedCorners(8));
-//
-//            Glide.with(context)
-//                    .load(item.getContent())
-//                    .apply(RequestOptions.bitmapTransform(option))
-//                    .into(image);
-//            sendTimeText.setText(item.getSendTime());
-//        }
     }
 }
